@@ -23,4 +23,36 @@ ROW_NUMBER() OVER(ORDER BY ci.cst_id) customer_key,
  ON ci.cst_key =ca.CID
  LEFT JOIN silver.erp_loc_a101 la
  ON ci.cst_key= la.CID;
+
+
+
+
+
+IF OBJECT_ID('gold.dim_products', 'V') IS NOT NULL
+DROP VIEW gold.dim_products;
+
+GO 
+
+CREATE VIEW gold.dim_products AS
+SELECT
+ROW_NUMBER() OVER(ORDER BY pd.prd_start_dt,pd.prd_key) AS product_key,
+pd.prd_id AS product_id,
+pd.prd_key AS product_number,
+pd.prd_nm AS product_name,
+pc.ID AS category_id,
+pc.CAT AS category,
+pc.SUBCAT AS sub_category,
+pc.MAINTENANCE AS maintenance,
+pd.prd_cost as cost,
+pd.prd_line AS product_line,
+pd.prd_start_dt  AS start_date
+
+FROM silver.crm_prd_info   AS pd
+LEFT JOIN silver.erp_px_cat_g1v2 AS  pc
+ON pd.cat_id=pc.ID
+WHERE pd.prd_end_dt IS NULL;
+
+
+
+
  
