@@ -10,13 +10,14 @@ ROW_NUMBER() OVER(ORDER BY ci.cst_id) customer_key,
  ci.cst_key AS customer_number,
  ci.cst_firstname  AS First_name,
  ci.cst_lastname AS Last_name,
+ la.CNTRY AS Country,
  CASE 
 	WHEN UPPER(ci.cst_gndr)!='N/A' THEN ci.cst_gndr
 	ELSE COALESCE(ca.GEN,'N/A')
  END  AS   gender,
  ca.BDATE as Birth_date,
- la.CNTRY AS Country,
- ci.cst_marital_status AS marital_status
+ ci.cst_marital_status AS marital_status,
+ ci.cst_create_date AS Create_date
  FROM silver.crm_cust_info ci 
  LEFT JOIN silver.erp_cust_az12 ca
  ON ci.cst_key =ca.CID
